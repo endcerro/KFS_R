@@ -1,6 +1,20 @@
 
-// #[allow(dead_code)]
-// #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+
+const HEADER : &str =
+"/* ************************************************************************** */\n\
+/*                                                                            */\n\
+/*                                                        :::      ::::::::   */\n\
+/*   kfs.rs                                             :+:      :+:    :+:   */\n\
+/*                                                    +:+ +:+         +:+     */\n\
+/*   By: edal--ce <edal--ce@student.42.fr>          +#+  +:+       +#+        */\n\
+/*                                                +#+#+#+#+#+   +#+           */\n\
+/*   Created: 2023/11/04 14:44:15 by edal--ce          #+#    #+#             */\n\
+/*   Updated: 2019/12/28 08:17:21 by edal--ce         ###   ########.fr       */\n\
+/*                                                                            */\n\
+/* ************************************************************************** */\n";
+
+#[allow(dead_code)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
 pub enum Color {
     Black = 0,
@@ -99,8 +113,24 @@ impl Writer {
             };
         }
     }
+    // fn change_foreground(&mut self, foreground : &Color) {
+    //     self.color_code.
+    // }
 }
 
+pub fn print_ascii()
+{
+    let mut writer = Writer {
+        column_position: 0,
+        _row_position: 0,
+        color_code: ColorCode::new(Color::Yellow, Color::Red),
+        buffer: unsafe { &mut *(0xb8000 as *mut Buffer)},
+    };
+
+    for i in 0x20..0x7F {
+        writer.write_byte(i)
+    }
+}
 pub fn print_something() {
     let mut writer = Writer {
         column_position: 0,
@@ -113,5 +143,7 @@ pub fn print_something() {
     writer.new_line();
     writer.write_byte(b'4');
     writer.write_byte(b'2');
-
+    writer.new_line();
+    // writer.write_string("😀");
+    writer.write_string(HEADER);
 }

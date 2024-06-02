@@ -5,11 +5,10 @@
 mod vga;
 use core::panic::PanicInfo;
 
-static HELLO: &[u8] = b"victor salope";
-
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     vga::print_something();
+    // vga::print_ascii();
 
     loop {}
 }
