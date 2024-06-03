@@ -1,5 +1,4 @@
 
-
 const HEADER : &str =
 "/* ************************************************************************** */\n\
 /*                                                                            */\n\
@@ -12,6 +11,15 @@ const HEADER : &str =
 /*   Updated: 2019/12/28 08:17:21 by edal--ce         ###   ########.fr       */\n\
 /*                                                                            */\n\
 /* ************************************************************************** */\n";
+
+const HEADER_42 : &str = 
+"         :::        ::::::::
+       :+:        :+:    :+:
+     +:+ +:+           +:+
+   +#+  +:+         +#+
+ +#+#+#+#+#+     +#+
+      #+#      #+#
+     ###     ##########";
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -33,7 +41,33 @@ pub enum Color {
     Pink = 13,
     Yellow = 14,
     White = 15
+    
 }
+impl Color {
+    fn cycle(&self) -> Self {
+        use Color::*;
+        match *self {
+            Black => Blue,
+            Blue => Green,
+            Green => Cyan,
+            Cyan => Red,
+            Red => Magenta,
+            Magenta => Brown,
+            Brown => LightGray,
+            LightGray => DarkGray,
+            DarkGray => LightBlue,
+            LightBlue => LightGreen,
+            LightGreen => LightCyan,
+            LightCyan => LightRed,
+            LightRed => Pink,
+            Pink => Yellow,
+            Yellow => White,
+            White => Black
+        }
+    }
+}
+
+
 
 #[repr(transparent)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -156,7 +190,7 @@ pub fn print_something() {
     writer.write_byte(b'2');
     writer.new_line();
     // writer.write_string("😀");
-    writer.write_string(HEADER);
+    writer.write_string(HEADER_42);
 }
 
 pub fn clear_screen() {
@@ -167,4 +201,28 @@ pub fn clear_screen() {
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer)},
     };
     writer.clear_screen();
+}
+
+pub fn print_ft() {
+    let mut current_color = Color::Blue;
+    let mut writer = Writer {
+        column_position: 0,
+        _row_position: 0,
+        color_code: ColorCode::new(current_color, Color::Black),
+        buffer: unsafe { &mut *(0xb8000 as *mut Buffer)},
+    };
+    writer.clear_screen();
+    for c in HEADER_42.bytes() {
+        match c {
+            b'\n' => {
+                writer.new_line();
+                current_color = current_color.cycle();
+                writer.color_code = ColorCode::new(current_color, Color::Black);
+            },
+            c => writer.write_byte(c)
+        }
+    }
+    // writer.color_code = ColorCode::new(Color::Red, Color::Black);
+    // writer.write_string(HEADER_42);
+
 }

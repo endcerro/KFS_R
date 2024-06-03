@@ -12,7 +12,7 @@ bootimage :
 qemu : bootimage
 	qemu-system-x86_64 -drive format=raw,file=target/x64-kfs_1/debug/bootimage-kfs-1.bin
 
-rust_files : configure
+rust_files :
 	cargo build
 
 asm_files : 

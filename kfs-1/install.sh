@@ -11,3 +11,6 @@ function deps ()
 
 deps
 rust
+source ~/.bashrc
+rustup toolchain install nightly --allow-downgrade
+rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu

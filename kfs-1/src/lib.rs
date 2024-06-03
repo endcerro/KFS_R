@@ -7,8 +7,7 @@ use core::panic::PanicInfo;
 
 #[no_mangle]
 pub extern fn rust_main() -> ! {
-    vga::clear_screen();
-    vga::print_something();
+    vga::print_ft();
     loop {}
 }
 
