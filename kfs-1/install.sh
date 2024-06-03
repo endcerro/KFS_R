@@ -23,7 +23,8 @@ function rust ()
 }
 function deps ()
 {
-    sudo apt install -y build-essential make bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev nasm grub-common xorriso sudo grub-pc-bin
+    sudo apt install -y build-essential make  nasm grub-common xorriso grub-pc-bin
 }
 
-binutils
+rust
+deps
