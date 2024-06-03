@@ -113,6 +113,17 @@ impl Writer {
             };
         }
     }
+    pub fn clear_screen(&mut self){
+        for row in 0..BUFFER_HEIGHT {
+            for col in 0..BUFFER_WIDTH {
+                self.buffer.chars[row][col] = ScreenCharacter {
+                    ascii_value : 0x20,
+                    color : ColorCode::new(Color::Black, Color::Black)
+                };
+            }
+        }
+        
+    }
     // fn change_foreground(&mut self, foreground : &Color) {
     //     self.color_code.
     // }
@@ -146,4 +157,14 @@ pub fn print_something() {
     writer.new_line();
     // writer.write_string("😀");
     writer.write_string(HEADER);
+}
+
+pub fn clear_screen() {
+    let mut writer = Writer {
+        column_position: 0,
+        _row_position: 0,
+        color_code: ColorCode::new(Color::Black, Color::Black),
+        buffer: unsafe { &mut *(0xb8000 as *mut Buffer)},
+    };
+    writer.clear_screen();
 }
