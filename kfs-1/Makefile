@@ -1,15 +1,10 @@
 
-# all :
+all : boot_basic
 
 
-# configure  :
-# 	rustup toolchain install nightly --allow-downgrade
-# 	rustup target add thumbv7em-none-eabihf
-# 	rustup component add llvm-tools-preview
-# 	cargo install bootimage
-# 	rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
-
-# install : 
+configure  :
+	rustup toolchain install nightly --allow-downgrade
+	rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
 
 bootimage : 
 	cargo bootimage
@@ -17,7 +12,7 @@ bootimage :
 qemu : bootimage
 	qemu-system-x86_64 -drive format=raw,file=target/x64-kfs_1/debug/bootimage-kfs-1.bin
 
-rust_files : 
+rust_files : configure
 	cargo build
 
 asm_files : 
