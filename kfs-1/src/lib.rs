@@ -13,6 +13,14 @@ pub extern "C" fn _start() -> ! {
     loop {}
 }
 
+#[no_mangle]
+pub extern fn rust_main() -> ! {
+    vga::print_something();
+    // vga::print_ascii();
+
+    loop {}
+}
+
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
 

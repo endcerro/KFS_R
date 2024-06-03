@@ -17,14 +17,17 @@ bootimage :
 qemu : bootimage
 	qemu-system-x86_64 -drive format=raw,file=target/x64-kfs_1/debug/bootimage-kfs-1.bin
 
+rust_files : 
+	cargo build
+
 asm_files : 
 	mkdir -p obj
 	nasm -f elf64 asm/boot.asm -o obj/boot.o
 	nasm -f elf64 asm/multiboot_header.asm -o obj/multiboot_header.o
 	nasm -f elf64 asm/long_mode_init.asm -o obj/long_mode_init.o
 
-kernel_basic : asm_files
-	ld -n -o obj/kernel.bin -T asm/linker.ld obj/multiboot_header.o obj/boot.o obj/long_mode_init.o
+kernel_basic : asm_files rust_files
+	ld -n -o obj/kernel.bin -T asm/linker.ld obj/multiboot_header.o obj/boot.o obj/long_mode_init.o target/x64-kfs_1/debug/libkfs_1.a
 
 iso_basic : kernel_basic
 	cp obj/kernel.bin isofiles/boot/kernel.bin
