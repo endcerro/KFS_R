@@ -21,9 +21,10 @@ asm_files :
 	mkdir -p obj
 	nasm -f elf64 asm/boot.asm -o obj/boot.o
 	nasm -f elf64 asm/multiboot_header.asm -o obj/multiboot_header.o
+	nasm -f elf64 asm/long_mode_init.asm -o obj/long_mode_init.o
 
 kernel_basic : asm_files
-	ld -n -o obj/kernel.bin -T asm/linker.ld obj/multiboot_header.o obj/boot.o
+	ld -n -o obj/kernel.bin -T asm/linker.ld obj/multiboot_header.o obj/boot.o obj/long_mode_init.o
 
 iso_basic : kernel_basic
 	cp obj/kernel.bin isofiles/boot/kernel.bin
