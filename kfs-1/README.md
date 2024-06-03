@@ -1,0 +1,6 @@
+-fno-builtin
+-fno-exception
+-fno-stack-protector
+-fno-rtti
+-nostdlib
+-nodefaultlibs
