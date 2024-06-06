@@ -13,3 +13,4 @@ Cargo.lock
 **/*.bin
 **/*.iso
 obj/
+isofiles/
