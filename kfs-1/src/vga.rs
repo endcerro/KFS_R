@@ -1,18 +1,18 @@
 
-const HEADER : &str =
-"/* ************************************************************************** */\n\
-/*                                                                            */\n\
-/*                                                        :::      ::::::::   */\n\
-/*   kfs.rs                                             :+:      :+:    :+:   */\n\
-/*                                                    +:+ +:+         +:+     */\n\
-/*   By: edal--ce <edal--ce@student.42.fr>          +#+  +:+       +#+        */\n\
-/*                                                +#+#+#+#+#+   +#+           */\n\
-/*   Created: 2023/11/04 14:44:15 by edal--ce          #+#    #+#             */\n\
-/*   Updated: 2019/12/28 08:17:21 by edal--ce         ###   ########.fr       */\n\
-/*                                                                            */\n\
-/* ************************************************************************** */\n";
+// const HEADER : &str =
+// "/* ************************************************************************** */\n\
+// /*                                                                            */\n\
+// /*                                                        :::      ::::::::   */\n\
+// /*   kfs.rs                                             :+:      :+:    :+:   */\n\
+// /*                                                    +:+ +:+         +:+     */\n\
+// /*   By: edal--ce <edal--ce@student.42.fr>          +#+  +:+       +#+        */\n\
+// /*                                                +#+#+#+#+#+   +#+           */\n\
+// /*   Created: 2023/11/04 14:44:15 by edal--ce          #+#    #+#             */\n\
+// /*   Updated: 2019/12/28 08:17:21 by edal--ce         ###   ########.fr       */\n\
+// /*                                                                            */\n\
+// /* ************************************************************************** */\n";
 
-const HEADER_42 : &str = 
+pub const HEADER_42 : &str = 
 "         :::        ::::::::
        :+:        :+:    :+:
      +:+ +:+           +:+
@@ -74,7 +74,7 @@ impl Color {
 struct ColorCode(u8);
 
 impl ColorCode {
-    fn new(foreground : Color, background: Color) -> ColorCode {
+    const fn new(foreground : Color, background: Color) -> ColorCode {
         ColorCode((background as u8) << 4 | (foreground as u8))
     }
 }
@@ -163,6 +163,15 @@ impl Writer {
     // }
 }
 
+use core::fmt;
+
+impl fmt::Write for Writer {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        self.write_string(s);
+        Ok(())
+    }
+}
+
 pub fn print_ascii()
 {
     let mut writer = Writer {
@@ -211,7 +220,7 @@ pub fn print_ft() {
         color_code: ColorCode::new(current_color, Color::Black),
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer)},
     };
-    writer.clear_screen();
+    // writer.clear_screen();
     for c in HEADER_42.bytes() {
         match c {
             b'\n' => {
@@ -225,4 +234,35 @@ pub fn print_ft() {
     // writer.color_code = ColorCode::new(Color::Red, Color::Black);
     // writer.write_string(HEADER_42);
 
+}
+
+use spin::Mutex;
+use lazy_static::lazy_static;
+
+lazy_static! {
+    pub static ref WRITER : Mutex<Writer> = Mutex::new(Writer {
+        column_position : 0,
+        _row_position : 0,
+        color_code : ColorCode::new(Color::LightGreen, Color::Black),
+        buffer : unsafe {
+            &mut *(0xb8000 as *mut Buffer)
+        },
+    });
+}
+
+#[macro_export]
+macro_rules! print {
+    ($($arg:tt)*) => ($crate::vga::_print(format_args!($($arg)*)));
+}
+
+#[macro_export]
+macro_rules! println {
+    () => ($crate::print!("\n"));
+    ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
+}
+
+#[doc(hidden)]
+pub fn _print(args: fmt::Arguments) {
+    use core::fmt::Write;
+    WRITER.lock().write_fmt(args).unwrap();
 }

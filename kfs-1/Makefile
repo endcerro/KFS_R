@@ -6,7 +6,7 @@ all : boot_basic
 # 	rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
 
 kvm : iso_basic
-	kvm -name kfs -m 1024 -cdrom ./os.iso -boot c
+	kvm -cpu host -name kfs -m 1024 -cdrom ./os.iso -boot c
 qemu : iso_basic
 	qemu-system-x86_64 -cdrom os.iso
 
