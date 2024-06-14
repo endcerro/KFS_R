@@ -8,12 +8,8 @@ use core::panic::PanicInfo;
 #[no_mangle]
 pub extern fn rust_main() -> ! {
     use core::fmt::Write;
-    // vga::clear_screen();
-    // println!("Hello world ? {}", 1.337);
+    vga::clear_screen();
     vga::print_ft();
-    // panic!("Oh no");
-    // vga::new_line();
-    writeln!(vga::WRITER.lock(), ", sample test {}", 1.0/2.0).unwrap();
     loop {}
 }
 

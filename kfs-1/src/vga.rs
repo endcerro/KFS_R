@@ -67,8 +67,6 @@ impl Color {
     }
 }
 
-
-
 #[repr(transparent)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 struct ColorCode(u8);
@@ -158,9 +156,6 @@ impl Writer {
         }
         
     }
-    // fn change_foreground(&mut self, foreground : &Color) {
-    //     self.color_code.
-    // }
 }
 
 use core::fmt;
@@ -172,33 +167,18 @@ impl fmt::Write for Writer {
     }
 }
 
-pub fn print_ascii()
-{
+pub fn _print_test() {
     let mut writer = Writer {
         column_position: 0,
         _row_position: 0,
         color_code: ColorCode::new(Color::Yellow, Color::Red),
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer)},
     };
-
-    for i in 0x20..0x7F {
-        writer.write_byte(i)
-    }
-}
-pub fn print_something() {
-    let mut writer = Writer {
-        column_position: 0,
-        _row_position: 0,
-        color_code: ColorCode::new(Color::Yellow, Color::Red),
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer)},
-    };
-
     writer.write_string("HELLO WORLD !");
     writer.new_line();
     writer.write_byte(b'4');
     writer.write_byte(b'2');
     writer.new_line();
-    // writer.write_string("😀");
     writer.write_string(HEADER_42);
 }
 
@@ -220,7 +200,6 @@ pub fn print_ft() {
         color_code: ColorCode::new(current_color, Color::Black),
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer)},
     };
-    // writer.clear_screen();
     for c in HEADER_42.bytes() {
         match c {
             b'\n' => {
@@ -231,9 +210,6 @@ pub fn print_ft() {
             c => writer.write_byte(c)
         }
     }
-    // writer.color_code = ColorCode::new(Color::Red, Color::Black);
-    // writer.write_string(HEADER_42);
-
 }
 
 use spin::Mutex;

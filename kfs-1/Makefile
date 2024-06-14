@@ -30,4 +30,4 @@ iso_basic : kernel_basic
 	cp obj/kernel.bin isofiles/boot/kernel.bin
 	grub-mkrescue -d /usr/lib/grub/i386-pc -o os.iso isofiles
 
-boot_basic : kvm
+boot_basic : qemu
