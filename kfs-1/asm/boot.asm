@@ -5,6 +5,7 @@ section .text
 bits 32
 start:
     mov esp, stack_top
+    mov edi, ebx ; Move Multiboot info pointer to edi for info in rust_main
     call check_multiboot
     call check_cpuid
     call check_long_mode
@@ -153,5 +154,5 @@ p3_table:
 p2_table:
     resb 4096
 stack_bottom:
-    resb 64
+    resb 4096 * 4
 stack_top:
