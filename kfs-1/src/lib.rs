@@ -2,6 +2,7 @@
 #![no_main]
 // #![feature(asm)]
 
+#[macro_use]
 mod vga;
 use core::panic::PanicInfo;
 
