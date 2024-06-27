@@ -9,7 +9,7 @@ crate-type = ["staticlib"]
 [dependencies]
 rlibc = "1.0.0"
 spin = "0.9.8"
-multiboot2 = "0.20.2"
+multiboot2-header = { version = "0.4.0", default-features = false }
 x86_64 = "0.15.1"
 [dependencies.lazy_static]
 version = "1.0"

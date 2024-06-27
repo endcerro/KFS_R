@@ -4,9 +4,9 @@ all : boot_basic
 # configure  :
 # 	rustup toolchain install nightly --allow-downgrade
 # 	rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
-
+#-cpu host
 kvm : iso_basic
-	kvm -cpu host -name kfs -m 1024 -cdrom ./os.iso -boot c
+	kvm  -name kfs -m 1024 -cdrom ./os.iso -boot c
 qemu : iso_basic
 	qemu-system-x86_64 -cdrom os.iso
 

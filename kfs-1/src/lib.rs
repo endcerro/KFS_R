@@ -1,18 +1,19 @@
 #![no_std]
 #![no_main]
 #![feature(abi_x86_interrupt)]
-
-// use multiboot2::{BootInformation, BootInformationHeader};
+use multiboot2_header::{HeaderTagFlag, HeaderTagISA, MbiTagType, RelocatableHeaderTag, RelocatableHeaderTagPreference, Multiboot2Header, Multiboot2BasicHeader};
 #[macro_use]
 pub mod vga;
 pub mod interrupts;
 use core::panic::PanicInfo;
 
 #[no_mangle]
-pub extern fn rust_main(_multiboot_information_address: usize) -> ! {
+pub extern fn rust_main(_multiboot_information_address : *const Multiboot2BasicHeader) -> ! {
     init();
-    print!("Sample {}", 1.0/0.0);
-    x86_64::instructions::interrupts::int3();
+    // print!("Sample {}", 1.0/0.0);
+    let mb2_hdr = unsafe { Multiboot2Header::from(_multiboot_information_address) };
+    println!("{:#?}", mb2_hdr);
+    // x86_64::instructions::interrupts::int3();
     loop {}
 }
 
